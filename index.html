@@ -4,25 +4,34 @@
     <meta charset="utf-8">
     <title>Redirecionando...</title>
 
-    <!-- Redirecionamento automático -->
-    <meta http-equiv="refresh" content="0;url=https://www.nfse.gov.br/ConsultaPublica/?tpc=1&chave=31186012222320881000160000000000001026028221642049">
-
     <script>
-        function getParameterByName(name) {
-            const url = window.location.href;
-            const nameRegex = name.replace(/[\[\]]/g, '\\$&');
-            const regex = new RegExp('[?&]' + nameRegex + '(=([^&#]*)|&|#|$)');
-            const results = regex.exec(url);
-            if (!results) return null;
-            if (!results[2]) return '';
-            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+    (function () {
+
+        // 1️⃣ tenta pegar pela query string (?chave=)
+        const params = new URLSearchParams(window.location.search);
+        let chave = params.get("chave");
+
+        // 2️⃣ se não existir, pega pelo PATH (/CHAVE)
+        if (!chave) {
+            const path = window.location.pathname;
+            chave = path.split("/").filter(Boolean).pop();
         }
-        
-        const chave = getParameterByName('chave');
-        const link = "https://www.nfse.gov.br/ConsultaPublica/?tpc=1&chave="
-        
-        // Fallback JS
-        window.location.href = link + chave;
+
+        // 3️⃣ validação (somente números)
+        if (!chave || !/^\d+$/.test(chave)) {
+            document.addEventListener("DOMContentLoaded", function () {
+                document.body.innerHTML = "<p>Chave inválida ou não informada.</p>";
+            });
+            return;
+        }
+
+        // 4️⃣ monta URL final
+        const url = "https://www.nfse.gov.br/ConsultaPublica/?tpc=1&chave=" + chave;
+
+        // 5️⃣ redireciona
+        window.location.replace(url);
+
+    })();
     </script>
 </head>
 <body>
