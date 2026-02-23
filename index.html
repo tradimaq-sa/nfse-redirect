@@ -8,8 +8,21 @@
     <meta http-equiv="refresh" content="0;url=https://www.nfse.gov.br/ConsultaPublica/?tpc=1&chave=31186012222320881000160000000000001026028221642049">
 
     <script>
+        function getParameterByName(name) {
+            const url = window.location.href;
+            const nameRegex = name.replace(/[\[\]]/g, '\\$&');
+            const regex = new RegExp('[?&]' + nameRegex + '(=([^&#]*)|&|#|$)');
+            const results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
+        
+        const chave = getParameterByName('chave');
+        const link = "https://www.nfse.gov.br/ConsultaPublica/?tpc=1&chave="
+        
         // Fallback JS
-        window.location.href = "https://www.nfse.gov.br/ConsultaPublica/?tpc=1&chave=31186012222320881000160000000000001026028221642049";
+        window.location.href = link + chave;
     </script>
 </head>
 <body>
